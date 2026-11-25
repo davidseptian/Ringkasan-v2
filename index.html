@@ -98,6 +98,7 @@ input[type=text],input[type=password]{background:var(--panel);color:var(--text);
 .stbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .scope{font-size:12px;color:var(--text-2);margin:6px 0 0}
 .kpis.k3{grid-template-columns:repeat(3,1fr)}
+.kpis.k3 .kpi.wide{grid-column:1/-1;border-color:rgba(212,175,55,.45)}
 @media(max-width:860px){.kpis.k3{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.kpis.k3{grid-template-columns:1fr}}
 section.bag{min-height:60px}
@@ -341,6 +342,10 @@ function rKU(){const c=bag('#s-ku','Keuangan','Pendapatan bersih, profit, dan ka
   addK(kp,'Total pengeluaran riil',jt(tO),pct(tO,tB)+' dari pendapatan bersih');
   addK(kp,'Saldo SHU Total',shu?rp(shu.saldo):'–','buku induk, per '+lblYM(KU.kas&&KU.kas.bulan&&KU.kas.bulan.length?KU.kas.bulan[KU.kas.bulan.length-1]:''));
   addK(kp,'Dana belum cair',jt(bc),num(sum(arr(KU.belum_cair_n)))+' order · estimasi omzet kotor');
+  const ds=KU.kas&&KU.kas.kantong&&KU.kas.kantong['Dana Siaga'],bkL=KU.kas&&KU.kas.bulan&&KU.kas.bulan.length?KU.kas.bulan[KU.kas.bulan.length-1]:'';
+  if(ds){const mL=(ds.m&&ds.m.length)?ds.m[ds.m.length-1]:[0,0];addK(kp,'Dana Siaga',rp(ds.saldo),'Buku_Kas, per '+lblYM(bkL)+' · bulan ini masuk '+jt(mL[0])+', keluar '+jt(mL[1]))}
+  else addK(kp,'Dana Siaga','–','belum ada catatan Dana Siaga di Buku_Kas');
+  kp.lastChild.classList.add('wide');
   c.appendChild(kp);
   if(L.length&&L.every(x=>!x.al)){const n=el('div','note');n.innerHTML='<b>Anggaran bulanan belum diisi</b> untuk periode ini, jadi Net profit kotor belum bermakna. Pakai Riil profit.';c.appendChild(n)}
   if(BERJALAN()){const n=el('div','note');n.innerHTML='<b>'+last+' belum lengkap.</b> Dana pesanan akhir bulan cair di bulan berikutnya, jadi pendapatan bersih bulan berjalan terlihat lebih rendah dari akhirnya.';c.appendChild(n)}
